@@ -1,0 +1,51 @@
+
+/*----------------------*/
+PseudoCode
+/*----------------------*/
+
+VARIABLES: Declare global variables
+int no_inputs = 0;
+int password[3] = {2,3,1};
+int inputs[3] = {0,0,0};
+
+We get inputs through ISR
+interrupt service routine (ISR)
+ISR(INT0_VECT){
+// isr of button 1
+inputs[no_inputs] = 1;
+no_inputs++;
+}
+
+ISR(INT1_VECT){
+// isr of button 2
+inputs[no_inputs] = 2;
+no_inputs++;
+}
+
+ISR(INT2_VECT){
+// isr of button 3
+inputs[no_inputs] = 3;
+no_inputs++;
+}
+
+
+In the main function:
+Setup our inputs and outputs:
+1. setup pushbuttons: PD2, PD3, PB2 as inputs
+2. setup LED: PC 0,1,2,3,4
+
+Setup our interrupts
+GICR, MCUR, MCUCR
+Setup INT 0,1,2
+Triggering: Rising edge for all 3
+
+while(1) -> loop that repeats forever{
+Once we have all the inputs, check the inputs with the password.
+
+if(no_inputs == 3){
+
+If (inputs = password) flash Green -> FUNCTION
+else if (inputs != password) flash red -> FUNCTION
+
+reset system() -> FUNCTION
+}
