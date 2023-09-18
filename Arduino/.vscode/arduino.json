@@ -1,0 +1,6 @@
+{
+    "port": "COM7",
+    "board": "arduino:avr:uno",
+    "programmer" : "c:\\WinAVR-20100110\\bin\\avrdude.exe",
+    "compilerPath": "c:\\WinAVR-20100110\\bin\\avr-gcc.exe"
+}

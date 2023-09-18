@@ -17,7 +17,7 @@ int main(void)
 	/*set -pb3 as output and leave other pins unchanged
 	DDRB=DDRB | (1<<PB3) PB3=3 
 	SYNTAX operand(1 which is 0b 0000 0001)<<n n=number of bits to be shifted
-	Initially DDRB= 0B 0000 0000 . shifting 1-3 times to the left produces ob 0000 1000
+	Initially DDRB= 0B 0000 0000. shifting 1-3 times to the left produces ob 0000 1000
 	hence DDRB=ob 0000 1000
 	setting only PB3 output
 	*/

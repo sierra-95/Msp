@@ -1,0 +1,55 @@
+Certainly! In a typical 7-segment display, each digit is formed by lighting up a combination of seven segments labeled 'a' through 'g'. These segments are arranged in such a way that, when illuminated in specific patterns, they can form different digits from 0 to 9.
+
+Here's a visual representation of a common cathode 7-segment display:
+
+
+   a
+  ---
+f|   |b
+  ---  
+e|   |c
+  ---   * g
+   d
+Each segment corresponds to a particular bit in a binary value, where a set bit (1) indicates that the segment is turned on, and a cleared bit (0) means that the segment is off. The mapping of segments to bits is typically as follows:
+
+
+     A
+  ------
+ |      |  <- Bit representation:
+F|      |B      0b00001100
+ |  G   |      0b10000000
+  ------
+ |      |  <- Segment representation:
+E|      |C      a b c d e f g
+ |   D  |
+  ------
+For example, to display the digit 0, we need to turn on segments 'a', 'b', 'c', 'd', 'e', and 'f'. In binary, this corresponds to the value 0b00111111.
+0b 0011 1111                          
+     fe dcba          //abcdef should b high. G=0 . start from RHS to LHS
+   a
+  ---
+f|   |b
+  ---  
+e|   |c
+  ---   * g
+   d 
+ 
+
+Here's the mapping of each digit to its binary representation:
+
+
+const uint8_t digits[10] = {
+    0b00111111, // 0
+    0b00000110, // 1
+    0b01011011, // 2
+    0b01001111, // 3
+    0b01100110, // 4
+    0b01101101, // 5
+    0b01111101, // 6
+    0b00000111, // 7
+    0b01111111, // 8
+    0b01101111  // 9
+};
+We can form each digit by setting the corresponding bits for the segments 'a' to 'g' to 1 (on) in the binary value. The order of the bits in the binary representation corresponds to the physical connection of the segments on the 7-segment display.
+
+Make sure to check the datasheet of your specific 7-segment display to verify the pinout and segment arrangement. If the segment connections are different from the common cathode display or if you are using a common anode display, the bit patterns would need to be adjusted accordingly to correctly display the desired digits.
