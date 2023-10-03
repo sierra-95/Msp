@@ -4,12 +4,6 @@
  * Author : EliasMurei
  */ 
 
-/*
- * Exercise3.c
- *
- * Created: 13/06/2023 18:07:50
- * Author : EliasMurei
- */
 #define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>

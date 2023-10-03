@@ -1,0 +1,5 @@
+{
+    "sketch": "digital_potentiometer.ino",
+    "port": "COM7",
+    "board": "arduino:avr:uno"
+}
