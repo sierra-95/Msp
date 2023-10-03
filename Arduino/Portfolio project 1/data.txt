@@ -70,3 +70,9 @@
 {"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
 {"Humidity":95,"TemperatureC":24.4,"TemperatureF":75.92,"HeatIndexC":25.37585,"HeatIndexF":77.67699}
 {"Humidity":95,"TemperatureC":24.4,"TemperatureF":75.92,"HeatIndexC":25.37585,"HeatIndexF":77.67699}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}
+{"Humidity":95,"TemperatureC":24.3,"TemperatureF":75.74,"HeatIndexC":25.26585,"HeatIndexF":77.47899}

@@ -4,3 +4,4 @@
 {"UID":"69 58 B5 63","Message":"Access denied"}
 {"UID":"C1 29 15 31","Message":"Access granted"}
 {"UID":"69 58 B5 63","Message":"Access denied"}
+{"UID":"C1 29 15 31","Message":"Access granted"}
