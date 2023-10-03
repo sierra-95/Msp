@@ -1,16 +1,22 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <LiquidCrystal.h>
-#include "DHT.h"
+#include <DHT.h>
+#include <ArduinoJson.h>
 
 #define SS_PIN 10
 #define RST_PIN 9
 int led1 = A0;
 int led2 = A1;
-#define beep_pin 8
-DHT dht(8, DHT11); // DHT sensor on pin 8
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
+
+#define beep_pin 8
+#define DHTPIN 8
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
 void setup()
 {
@@ -34,85 +40,101 @@ void setup()
   Serial.println("Put your card to the reader...");
   Serial.println();
 
-  dht.begin(); // Initialize DHT sensor
+  dht.begin(); // Initiate DHT sensor
 }
 
 void loop()
 {
-  digitalWrite(beep_pin, LOW);
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Put your card to");
-  lcd.setCursor(0, 1);
-  lcd.print("the reader......");
-  delay(300);
+  // Collect DHT data every 5 seconds
+  static unsigned long lastDHTRead = 0;
+  if (millis() - lastDHTRead >= 5000)
+  {
+    lastDHTRead = millis();
 
-  // Look for new cards
-  if (!mfrc522.PICC_IsNewCardPresent())
-  {
-    return;
-  }
-  // Select one of the cards
-  if (!mfrc522.PICC_ReadCardSerial())
-  {
-    return;
-  }
-  // Show UID on the serial monitor
-  Serial.print("UID tag :");
-  String content = "";
-  byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++)
-  {
-    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-    Serial.print(mfrc522.uid.uidByte[i], HEX);
-    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-    content.concat(String(mfrc522.uid.uidByte[i], HEX));
-  }
-  Serial.println();
-  Serial.print("Message : ");
-  content.toUpperCase();
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+    float f = dht.readTemperature(true);
 
-  if (content.substring(1) == "C1 29 15 31") // Change here the UID of the card/cards that you want to give access
-  {
-    digitalWrite(beep_pin, HIGH);
-    digitalWrite(led1, HIGH);
-    delay(1000);
-    digitalWrite(led1, LOW);
-    digitalWrite(beep_pin, LOW);
-    delay(100);
-    lcd.setCursor(0, 0);
-    lcd.print("ID : ");
-    lcd.print(content.substring(1));
-    lcd.setCursor(0, 1);
-    lcd.print("Authorized access");
-    Serial.println("Authorized access");
-    delay(3500);
-  }
-  else
-  {
-    digitalWrite(beep_pin, HIGH);
-    digitalWrite(led2, HIGH);
-    delay(1000);
-    digitalWrite(led2, LOW);
-    lcd.setCursor(0, 0);
-    lcd.print("ID : ");
-    lcd.print(content.substring(1));
-    lcd.setCursor(0, 1);
-    lcd.print("Access denied");
-    Serial.println("Access denied");
-    delay(1500);
+    if (!isnan(h) && !isnan(t) && !isnan(f))
+    {
+      // Create a JSON object for DHT11 sensor data
+      StaticJsonDocument<100> jsonDoc;
+      jsonDoc["Humidity"] = h;
+      jsonDoc["TemperatureC"] = t;
+      jsonDoc["TemperatureF"] = f;
+      jsonDoc["HeatIndexC"] = dht.computeHeatIndex(t, h, false);
+      jsonDoc["HeatIndexF"] = dht.computeHeatIndex(f, h);
+
+      // Serialize JSON data and send it to Serial
+      serializeJson(jsonDoc, Serial);
+      Serial.println(); // Add a newline for clarity
+    }
+    else
+    {
+      Serial.println(F("Failed to read from DHT sensor!"));
+    }
   }
 
-  // Reading temperature and humidity from DHT11
-  float h = dht.readHumidity();
-  float t = dht.readTemperature();
-  if (!isnan(h) && !isnan(t))
+  // Look for new cards and process RFID data
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())
   {
-    Serial.print("Humidity: ");
-    Serial.print(h);
-    Serial.print("%  Temperature: ");
-    Serial.print(t);
-    Serial.println("°C");
+    // Show UID on serial monitor
+    Serial.print("UID tag :");
+    String content = "";
+    for (byte i = 0; i < mfrc522.uid.size; i++)
+    {
+      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+      Serial.print(mfrc522.uid.uidByte[i], HEX);
+      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+      content.concat(String(mfrc522.uid.uidByte[i], HEX));
+    }
+    Serial.println();
+    Serial.print("Message : ");
+    content.toUpperCase();
+
+    // Create a JSON object
+    StaticJsonDocument<128> jsonDoc;
+    jsonDoc["UID"] = content.substring(1);
+
+    // Check access and add "Message" field to the JSON object
+    if (content.substring(1) == "C1 29 15 31") // Change here the UID of the card/cards that you want to give access
+    {
+      jsonDoc["Message"] = "Access granted";
+      digitalWrite(beep_pin, HIGH);
+      digitalWrite(led1, HIGH);
+      delay(1000);
+      digitalWrite(led1, LOW);
+      digitalWrite(beep_pin, LOW);
+      lcd.setCursor(0, 0);
+      lcd.print("ID : ");
+      lcd.print(content.substring(1));
+      lcd.setCursor(0, 1);
+      lcd.print("Authorized access");
+      Serial.println("Authorized access");
+      delay(3500);
+    }
+    else
+    {
+      jsonDoc["Message"] = "Access denied";
+      digitalWrite(beep_pin, HIGH);
+      digitalWrite(led2, HIGH);
+      delay(1000);
+      digitalWrite(led2, LOW);
+      lcd.setCursor(0, 0);
+      lcd.print("ID : ");
+      lcd.print(content.substring(1));
+      lcd.setCursor(0, 1);
+      lcd.print("Access denied");
+      Serial.println(" Access denied");
+      delay(1500);
+    }
+
+    // Serialize the JSON object to a string
+    String jsonString;
+    serializeJson(jsonDoc, jsonString);
+
+    // Print the JSON data to the serial monitor
+    Serial.println("RFID Data:");
+    Serial.println(jsonString);
   }
-  delay(5000); // Delay for 5 seconds before the next loop
 }

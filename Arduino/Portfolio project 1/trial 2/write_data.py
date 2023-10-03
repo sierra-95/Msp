@@ -4,13 +4,13 @@ import schedule
 import json
 
 def main_func():
-    arduino = serial.Serial('com6', 9600)
+    arduino = serial.Serial('com7', 9600)
     print('Established serial connection to Arduino')
     arduino_data = arduino.readline().decode("utf-8").strip()
 
     try:
         json_data = json.loads(arduino_data)
-        with open('data.txt', 'a') as file:
+        with open('login.txt', 'a') as file:
             json.dump(json_data, file)
             file.write('\n')
 
@@ -18,9 +18,9 @@ def main_func():
     except json.JSONDecodeError:
         print(f'Invalid JSON data received: {arduino_data}')
 
-    arduino.close()
-    print('Connection closed')
-    print('<----------------------------->')
+    #arduino.close()
+    #print('Connection closed')
+    #print('<----------------------------->')
 
 # ----------------------------------------Main Code------------------------------------
 print('Program started')
