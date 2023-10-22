@@ -2,7 +2,7 @@ import serial
 import json
 
 # Define the serial port and baud rate
-ser = serial.Serial('com7', 9600)
+ser = serial.Serial('com5', 9600)
 
 # Create functions to save data to the respective files
 def save_dht11_data(data):

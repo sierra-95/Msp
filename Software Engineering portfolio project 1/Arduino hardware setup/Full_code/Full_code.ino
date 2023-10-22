@@ -47,7 +47,7 @@ void loop()
 {
   // Collect DHT data every 5 seconds
   static unsigned long lastDHTRead = 0;
-  if (millis() - lastDHTRead >= 5000)
+  if (millis() - lastDHTRead >= 30000)
   {
     lastDHTRead = millis();
 

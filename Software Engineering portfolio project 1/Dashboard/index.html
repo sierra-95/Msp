@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard</title>
+	<title>Home</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,29 +12,25 @@
 	</header>
 	<nav>
     	<ul>
-        	<li><a href="#">Home</a></li>
-	        <li><a href="#">Sensors</a></li>
-	        <li><a href="#">Data</a></li>
+        	<li><a href="index.html">Home</a></li>
+	        <li><a href="login.html">RFID</a></li>
 	        <li><a href="#">Settings</a></li>
     	</ul>
 	</nav>
 	<main>
-    	<section class="login">
-        	<h2>Login</h2>
-	        <form action="login.php" method="post">
-	            <label for="username">Username:</label>
-	            <input type="text" id="username" name="username" required>
-	            <label for="password">Password:</label>
-	            <input type="password" id="password" name="password" required>
-            	<button type="submit">Login</button>
-	        </form>
-	    </section>
-	    <section class="sensor-data">
-	        <h2>Sensor Data</h2>
-	        <!-- Sensor data content goes here -->
-	    </section>
-	    <section class="visualization">
+		<section class="sensor-data">
+			<h2>Sensor Data</h2>
+			<div class="dropdown">
+				<button class="dropbtn">Sensor selection</button>
+				<div class="dropdown-content">
+					<a href="humidity.html">Humidity</a>
+					<a href="temprature.html">Temperature</a>
+				</div>
+			</div>
+		</section>
+		<section class="visualization">
 	        <h2>Data Visualization</h2>
+			<a href="data_visualization.html">view data analysis</a>
 	        <!-- Data visualization content goes here -->
 	    </section>
 	</main>
