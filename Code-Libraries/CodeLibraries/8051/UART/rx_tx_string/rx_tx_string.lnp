@@ -1,4 +1,0 @@
-"main.obj",
-"uart.obj" 
-TO "rx_tx_string" 
-RAMSIZE(256) 

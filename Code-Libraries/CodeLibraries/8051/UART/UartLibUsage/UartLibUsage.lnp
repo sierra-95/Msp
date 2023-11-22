@@ -1,4 +1,0 @@
-"main.obj",
-"uart.obj" 
-TO "UartLibUsage" 
-RAMSIZE(256) 

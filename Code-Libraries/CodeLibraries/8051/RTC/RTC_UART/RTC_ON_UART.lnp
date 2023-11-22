@@ -1,7 +1,0 @@
-"delay.obj",
-"i2c.obj",
-"main.obj",
-"uart.obj",
-"rtc.obj" 
-TO "RTC_ON_UART" 
-RAMSIZE(256) 

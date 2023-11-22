@@ -1,6 +1,0 @@
-"adc.obj",
-"delay.obj",
-"main.obj",
-"lcd.obj" 
-TO "adc_multi_channel" 
-RAMSIZE(256) 
